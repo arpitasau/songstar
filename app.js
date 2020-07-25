@@ -76,8 +76,29 @@ function multiSearch() {
 
 //Aquery that returns all data contained within a specific range
 function rangeSearch() {
-    console.log("searching range");
-    initialPrompts()
+    inquirer.prompt([
+        {
+            name: 'beginning',
+            type: "number",
+            message: "starting position?"
+        },
+    {
+            name: 'end',
+            type: "number",
+            message: "End position?"
+
+    }
+    ]).then(answers => {
+        connection.query(
+            'SELECT position, artist, song, year FROM top5000 WHERE position BETWEEN ? AND ?' , 
+            [answers.beginning, answers.end],
+            (err, results) =>{
+            if (err)throw err
+            console.table(results)
+            initialPrompts()
+        })
+    })
+    
 }
 
 function songSearch() {

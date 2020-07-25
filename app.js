@@ -52,8 +52,19 @@ function initialPrompts() {
 
 //artist search
 function artistSearch() {
-    console.log("searching artist...");
-    initialPrompts()
+    inquirer.prompt([{
+        message: "Which artist are you looking for?",
+        name: "artist", 
+    }]).then(answer => {
+        connection.query(
+            'SELECT position, artist, song, year FROM top5000 WHERE ?', 
+            {artist: answer.artist},
+            (err, results) =>{
+            if (err)throw err
+            console.table(results)
+            initialPrompts()
+        })
+    })
 }
 
 //A query that returns all artists who appear within the top 5000 more than once
